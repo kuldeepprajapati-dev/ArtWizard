@@ -1,5 +1,6 @@
 import streamlit as st
 import cv2
+from PIL import Image
 
 
 def pencil_sketch(image_path):
@@ -50,20 +51,28 @@ def image_transformation_page():
 
     transformation_type = st.radio("Select transformation type:", ("Pencil Sketch", "Cartoonify"))
 
-    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-    st.text('OR')
-    cap = st.camera_input('Capture an image')
-    if uploaded_file is not None:
-        uploaded_file = uploaded_file
-    if cap is not None:
-        uploaded_file = cap
+    option = st.radio("Choose option:", ("Upload from device", "Capture from camera"))
 
-    if uploaded_file is not None:
-        # Save the uploaded file to a temporary directory
-        temp_image_path = 'temp_image.' + uploaded_file.name.split('.')[-1]
-        with open(temp_image_path, 'wb') as f:
-            f.write(uploaded_file.getbuffer())
+    temp_image_path = None  # Initialize temp_image_path
 
+    if option == "Upload from device":
+        uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+        if uploaded_file is not None:
+            # Save the uploaded file to a temporary directory
+            temp_image_path = 'temp_image.' + uploaded_file.name.split('.')[-1]
+            with open(temp_image_path, 'wb') as f:
+                f.write(uploaded_file.getbuffer())
+
+    elif option == "Capture from camera":
+        cap = st.camera_input('Capture an image')
+        if cap is not None:
+            # Open the captured image using PIL
+            img = Image.open(cap)
+            # Save the captured image to a temporary directory
+            temp_image_path = 'temp_image.png'
+            img.save(temp_image_path)
+
+    if temp_image_path is not None:
         # Display the original image
         original_img = cv2.imread(temp_image_path)
         st.image(cv2.cvtColor(original_img, cv2.COLOR_BGR2RGB), caption='Original Image', use_column_width=True)
