@@ -148,7 +148,7 @@ def about_page():
 
     st.header('Workflow:')
     st.write("""
-        1. Upload an image using the file uploader.
+        1. Upload an image using the file uploader OR Capture picture from camera.
         2. Select the transformation type: Pencil Sketch or Cartoonify.
         3. Click the corresponding button to apply the transformation.
         4. Optionally, you can save or download the transformed image.
