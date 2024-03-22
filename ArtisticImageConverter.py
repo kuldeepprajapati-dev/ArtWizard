@@ -51,6 +51,12 @@ def image_transformation_page():
     transformation_type = st.radio("Select transformation type:", ("Pencil Sketch", "Cartoonify"))
 
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+    st.text('OR')
+    cap = st.camera_input('Capture an image')
+    if uploaded_file is not None:
+        uploaded_file = uploaded_file
+    if cap is not None:
+        uploaded_file = cap
 
     if uploaded_file is not None:
         # Save the uploaded file to a temporary directory
